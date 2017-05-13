@@ -22,10 +22,10 @@ public class Client {
 	
 	public void adduser() throws RemoteException {
 		Scanner input = new Scanner(System.in);
-		System.out.println("Digite o nome de usuário e a senha, separados por ; .Ex: 'foo;123'");
+		System.out.println("Digite o nome de usuario e a senha, separados por ; .Ex: 'foo;123'");
 		String[] data = input.next().split(";");
 		if(lsi.verify(data[0], data[1])){
-			System.out.println("Usuário já cadastrado!!!");
+			System.out.println("Usuario ja cadastrado!!!");
 			input.close();
 			return;
 		}
@@ -41,10 +41,10 @@ public class Client {
 	
 	public void deluser() throws RemoteException {
 		Scanner input = new Scanner(System.in);
-		System.out.println("Digite o nome de usuário que deve ser excluído: ");
+		System.out.println("Digite o nome de usuario que deve ser excluido: ");
 		String[] data = input.next().split(";");
 		if(lsi.verify(data[0], data[1])){
-			System.out.println("Usuário não existe!!!");
+			System.out.println("Usuario nao existe!!!");
 			input.close();
 			return;			
 		}
@@ -54,10 +54,10 @@ public class Client {
 	
 	public void pass() throws RemoteException {
 		Scanner input = new Scanner(System.in);
-		System.out.println("Digite o nome de usuário e a senha, separados por ; .Ex: 'foo;123'");
+		System.out.println("Digite o nome de usuario e a senha, separados por ; .Ex: 'foo;123'");
 		String[] data = input.next().split(";");
 		if(lsi.verify(data[0], data[1])){
-			System.out.println("Usuário não existe!!!");
+			System.out.println("Usuario nao existe!!!");
 			input.close();
 			return;			
 		}
@@ -66,18 +66,18 @@ public class Client {
 	}
 	
 	public void help() throws RemoteException {
-		System.out.println("Comandos válidos(Case-sensitive): ");
+		System.out.println("Comandos validos(Case-sensitive): ");
 		System.out.println(lsi.help());
 	}
 	
 	public void verify() throws RemoteException {
 		Scanner input = new Scanner(System.in);
-		System.out.println("Digite o nome de usuário e a senha, separados por ; .Ex: 'foo;123'");
+		System.out.println("Digite o nome de usuario e a senha, separados por ; .Ex: 'foo;123'");
 		String[] data = input.next().split(";");
 		if(lsi.verify(data[0], data[1]))
-			System.out.println("Combinação de usuário e senha é válida");
+			System.out.println("Combinacao de usuario e senha eh valida");
 		else
-			System.out.println("Usuário e senha não encontrados");
+			System.out.println("Usuario e senha nao encontrados");
 		
 		input.close();				
 	}
@@ -110,7 +110,7 @@ public class Client {
 					this.pass();
 					break;
 				default: 
-					System.out.println("Comando inválido");
+					System.out.println("Comando invalido");
 					break;
 			}
 		}while(opt != "SAIR");
