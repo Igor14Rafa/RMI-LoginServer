@@ -6,13 +6,18 @@ import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Vector;
 
 
-public class Server implements InterfaceLoginServer{
+public class Server extends UnicastRemoteObject implements InterfaceLoginServer{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Vector<User> users = new Vector<User>();
 	
-	public Server(){
+	public Server() throws RemoteException {
 		readFile();
 	}
 	
