@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -28,12 +30,26 @@ public class Server implements InterfaceLoginServer{
 			System.out.println("Erro na leitura do arquivo de dados dos usuários: " + e.toString());
 		}
 	}
+	
+	private void writeFile(){
+		try{
+			PrintWriter writer = new PrintWriter(new FileWriter("users_database.txt"));
+			for(User u : users)
+				writer.println(u.getUsername() + ";" + u.getPassword());
+			writer.flush();
+			writer.close();
+		}
+		catch(IOException e){
+			System.out.println("Erro na escrita do arquivo de dados dos usuários: " + e.toString());
+		}
+	}
 
 	@Override
 	public void adduser(String username, String password)
 			throws RemoteException {
 		// TODO Auto-generated method stub
 		users.add(new User(username, password));
+		writeFile();
 	}
 
 	@Override
@@ -51,13 +67,14 @@ public class Server implements InterfaceLoginServer{
 	}
 
 	@Override
-	public void deluser(String username) throws RemoteException {
+	public void deluser(String username, String password) throws RemoteException {
 		// TODO Auto-generated method stub
 		for(int i = 0; i < this.users.size(); i++)
 			if(users.elementAt(i).getUsername() == username){
 				users.remove(i);
 				break;
-			}		
+			}
+		writeFile();
 	}
 
 	@Override
@@ -69,6 +86,7 @@ public class Server implements InterfaceLoginServer{
 				break;
 			}
 		}
+		writeFile();
 	}
 
 	@Override

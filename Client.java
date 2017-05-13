@@ -24,6 +24,11 @@ public class Client {
 		Scanner input = new Scanner(System.in);
 		System.out.println("Digite o nome de usuário e a senha, separados por ; .Ex: 'foo;123'");
 		String[] data = input.next().split(";");
+		if(lsi.verify(data[0], data[1])){
+			System.out.println("Usuário já cadastrado!!!");
+			input.close();
+			return;
+		}
 		lsi.adduser(data[0], data[1]);
 		input.close();
 	}
@@ -37,8 +42,13 @@ public class Client {
 	public void deluser() throws RemoteException {
 		Scanner input = new Scanner(System.in);
 		System.out.println("Digite o nome de usuário que deve ser excluído: ");
-		String user = input.next();
-		lsi.deluser(user);
+		String[] data = input.next().split(";");
+		if(lsi.verify(data[0], data[1])){
+			System.out.println("Usuário não existe!!!");
+			input.close();
+			return;			
+		}
+		lsi.deluser(data[0], data[1]);
 		input.close();		
 	}
 	
@@ -46,6 +56,11 @@ public class Client {
 		Scanner input = new Scanner(System.in);
 		System.out.println("Digite o nome de usuário e a senha, separados por ; .Ex: 'foo;123'");
 		String[] data = input.next().split(";");
+		if(lsi.verify(data[0], data[1])){
+			System.out.println("Usuário não existe!!!");
+			input.close();
+			return;			
+		}
 		lsi.pass(data[0], data[1]);
 		input.close();				
 	}
