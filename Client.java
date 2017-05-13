@@ -22,15 +22,22 @@ public class Client {
 	
 	public void adduser() throws RemoteException {
 		Scanner input = new Scanner(System.in);
-		System.out.println("Digite o nome de usuario e a senha, separados por ; .Ex: 'foo;123'");
-		String[] data = input.next().split(";");
-		if(lsi.verify(data[0], data[1])){
-			System.out.println("Usuario ja cadastrado!!!");
-			input.close();
-			return;
+		try{
+			System.out.println("Digite o nome de usuario e a senha, separados por ; .Ex: 'foo;123'");
+			String[] data = input.next().split(";");
+			if(lsi.verify(data[0], data[1])){
+				System.out.println("Usuario ja cadastrado!!!");
+				input.close();
+				return;
+			}
+			lsi.adduser(data[0], data[1]);
 		}
-		lsi.adduser(data[0], data[1]);
-		input.close();
+		catch(Exception e){
+			System.out.println("Erro ao adicionar usuário na base de dados: " + e.toString());
+		}
+		finally{
+			input.close();
+		}
 	}
 	
 	public void listuser() throws RemoteException {
