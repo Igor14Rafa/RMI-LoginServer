@@ -2,11 +2,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
-import java.util.Vector;
-
 
 public class Client {
 	InterfaceLoginServer lsi;
+	Scanner in = new Scanner(System.in);
 	
 	public Client(){
 		System.out.println("Iniciando o cliente...");
@@ -21,82 +20,74 @@ public class Client {
 	}
 	
 	public void adduser() throws RemoteException {
-		Scanner input = new Scanner(System.in);
 		try{
-			System.out.println("Digite o nome de usuario e a senha, separados por ; .Ex: 'foo;123'");
-			String[] data = input.next().split(";");
+			System.out.print("Digite o nome de usuario e a senha, separados por ';'. Ex: foo;123: ");
+			String[] data = in.next().split(";");
 			if(lsi.verify(data[0], data[1])){
 				System.out.println("Usuario ja cadastrado!!!");
-				input.close();
+				return;
+			}
+			if(lsi.search(data[0])){
+				System.out.println("Nome de usuario ja esta sendo utilizado!!!");
 				return;
 			}
 			lsi.adduser(data[0], data[1]);
+			System.out.println("Usuario " + data[0] + " cadastrado!!!");
 		}
 		catch(Exception e){
-			System.out.println("Erro ao adicionar usuário na base de dados: " + e.toString());
-		}
-		finally{
-			input.close();
+			System.out.println("Erro ao adicionar usuário na base de dados: ");
+			e.printStackTrace();
 		}
 	}
 	
 	public void listuser() throws RemoteException {
-		Vector<User> aux_list = lsi.listuser();
-		for(User u : aux_list)
-			System.out.println(u.getUsername());
+		System.out.println("Usuarios cadastrados: ");
+		System.out.println(lsi.listuser());
+		return;
 	}
 	
 	public void deluser() throws RemoteException {
-		Scanner input = new Scanner(System.in);
-		System.out.println("Digite o nome de usuario que deve ser excluido: ");
-		String[] data = input.next().split(";");
-		if(lsi.verify(data[0], data[1])){
+		System.out.print("Digite o nome e a senha do usuario que deve ser excluido, separados por ';'. Ex: foo;123:  ");
+		String[] data = in.next().split(";");
+		if(!lsi.verify(data[0], data[1])){
 			System.out.println("Usuario nao existe!!!");
-			input.close();
-			return;			
+			return;
 		}
 		lsi.deluser(data[0], data[1]);
-		input.close();		
 	}
 	
 	public void pass() throws RemoteException {
-		Scanner input = new Scanner(System.in);
-		System.out.println("Digite o nome de usuario e a senha, separados por ; .Ex: 'foo;123'");
-		String[] data = input.next().split(";");
-		if(lsi.verify(data[0], data[1])){
-			System.out.println("Usuario nao existe!!!");
-			input.close();
-			return;			
+		System.out.print("Digite o nome de usuario e a senha, separados por ';'. Ex: foo;123: ");
+		String[] data = in.next().split(";");
+		if(!lsi.search(data[0])){
+			System.out.println("Usuario nao encontrado na base de dados!!!");
+			return;
 		}
 		lsi.pass(data[0], data[1]);
-		input.close();				
+		System.out.println("Senha do usuario " + data[0] + " alterada!!");
 	}
 	
 	public void help() throws RemoteException {
 		System.out.println("Comandos validos(Case-sensitive): ");
 		System.out.println(lsi.help());
+		return;
 	}
 	
 	public void verify() throws RemoteException {
-		Scanner input = new Scanner(System.in);
-		System.out.println("Digite o nome de usuario e a senha, separados por ; .Ex: 'foo;123'");
-		String[] data = input.next().split(";");
+		System.out.print("Digite o nome de usuario e a senha, separados por ';'. Ex: foo;123: ");
+		String[] data = in.next().split(";");
 		if(lsi.verify(data[0], data[1]))
 			System.out.println("Combinacao de usuario e senha eh valida");
 		else
 			System.out.println("Usuario e senha nao encontrados");
-		
-		input.close();				
 	}
 	 
-	
-	public void menu() throws RemoteException{
-		Scanner input = new Scanner(System.in);
-		String opt;
+	public void menu() throws RemoteException {
+		String opt = "";
 		
-		System.out.println(">>> ");
-		do{
-			opt = input.next();
+		while(!opt.contains("SAIR")){
+			System.out.print(">>> ");
+			opt = in.next();
 			switch(opt){
 				case "ADDUSER": 
 					this.adduser();
@@ -116,12 +107,14 @@ public class Client {
 				case "PASS": 
 					this.pass();
 					break;
+				case "SAIR":
+					in.close();
+					System.exit(0);
 				default: 
-					System.out.println("Comando invalido");
+					System.out.println("Comando invalido. Tente novamente");
 					break;
 			}
-		}while(opt != "SAIR");
-		input.close();
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -130,7 +123,8 @@ public class Client {
 			c.menu();
 		}
 		catch(Exception e){
-			System.out.println("Erro ao executar o cliente de login: " + e.toString());
+			System.out.println("Erro ao executar o cliente de login: ");
+			e.printStackTrace();
 		}
 	}
 }
