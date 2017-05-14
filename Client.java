@@ -16,28 +16,23 @@ public class Client {
 		}
 		catch(Exception e){
 			System.out.println("Erro ao tentar se conectar com o servidor de login: " + e.toString());
+			e.printStackTrace();
 		}
 	}
 	
 	public void adduser() throws RemoteException {
-		try{
-			System.out.print("Digite o nome de usuario e a senha, separados por ';'. Ex: foo;123: ");
-			String[] data = in.next().split(";");
-			if(lsi.verify(data[0], data[1])){
-				System.out.println("Usuario ja cadastrado!!!");
-				return;
-			}
-			if(lsi.search(data[0])){
-				System.out.println("Nome de usuario ja esta sendo utilizado!!!");
-				return;
-			}
-			lsi.adduser(data[0], data[1]);
-			System.out.println("Usuario " + data[0] + " cadastrado!!!");
+		System.out.print("Digite o nome de usuario e a senha, separados por ';'. Ex: foo;123: ");
+		String[] data = in.next().split(";");
+		if(lsi.verify(data[0], data[1])){
+			System.out.println("Usuario ja cadastrado!!!");
+			return;
 		}
-		catch(Exception e){
-			System.out.println("Erro ao adicionar usuário na base de dados: ");
-			e.printStackTrace();
+		if(lsi.search(data[0])){
+			System.out.println("Nome de usuario ja esta sendo utilizado!!!");
+			return;
 		}
+		lsi.adduser(data[0], data[1]);
+		System.out.println("Usuario " + data[0] + " cadastrado!!!");
 	}
 	
 	public void listuser() throws RemoteException {
@@ -79,7 +74,7 @@ public class Client {
 		if(lsi.verify(data[0], data[1]))
 			System.out.println("Combinacao de usuario e senha eh valida");
 		else
-			System.out.println("Usuario e senha nao encontrados");
+			System.out.println("Combinacao de usuario e senha invalida");
 	}
 	 
 	public void menu() throws RemoteException {
@@ -123,7 +118,7 @@ public class Client {
 			c.menu();
 		}
 		catch(Exception e){
-			System.out.println("Erro ao executar o cliente de login: ");
+			System.out.println("Erro ao executar o cliente de login: " + e.toString());
 			e.printStackTrace();
 		}
 	}
